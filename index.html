@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>National Youth Computer Academy</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+    header, footer { background-color: #004080; color: white; text-align: center; padding: 15px; }
+    nav ul { list-style: none; padding: 0; display: flex; justify-content: center; gap: 20px; margin: 0; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    section { padding: 40px 20px; text-align: center; }
+    .btn { background-color: #0066cc; color: white; padding: 12px 24px; border: none; cursor: pointer; font-size: 16px; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin: 10px 0; }
+
+    .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0;
+             width: 100%; height: 100%; overflow: auto;
+             background-color: rgba(0,0,0,0.4); }
+
+    .modal-content { background-color: #fff; margin: 10% auto; padding: 20px;
+                     border: 1px solid #888; width: 90%; max-width: 500px; }
+
+    .close { float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+    label, input, select, textarea { width: 100%; margin: 8px 0; padding: 10px; box-sizing: border-box; }
+    input[type=radio] { width: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>National Youth Computer Academy</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#admissions">Admissions</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home">
+    <h2>Welcome to Our Academy</h2>
+    <p>Providing quality computer education to empower the youth in Gajdharpara, Berhampore, Murshidabad.</p>
+    <button class="btn" onclick="openForm()">Enroll Now</button>
+  </section>
+
+  <section id="courses">
+    <h2>Our Courses</h2>
+    <ul>
+      <li>Basic Computer Training</li>
+      <li>Web Development</li>
+      <li>Programming Languages</li>
+      <li>Graphic Design</li>
+    </ul>
+  </section>
+
+  <!-- Modal Registration Form -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeForm()">&times;</span>
+      <h2>Enrollment Form</h2>
+      <form id="registrationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" required>
+        <label for="course">Select Course:</label>
+        <select id="course" required>
+          <option value="">--Select Course--</option>
+          <option>Basic Computer Training</option>
+          <option>Web Development</option>
+          <option>Programming Languages</option>
+          <option>Graphic Design</option>
+        </select>
+        <label for="address">Address:</label>
+        <textarea id="address" required></textarea>
+        <p>Payment Method:</p>
+        <input type="radio" id="upi" name="payment" value="upi" required> UPI<br>
+        <input type="radio" id="card" name="payment" value="card"> Credit/Debit Card<br><br>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 National Youth Computer Academy. Reg. No: NYCVA 0103. Pin-742165</p>
+  </footer>
+
+  <script>
+    function openForm() {
+      document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeForm() {
+      document.getElementById('myModal').style.display = 'none';
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Form submitted! Proceeding to payment...');
+      closeForm();
+      payNow();
+    });
+
+    function payNow() {
+      var options = {
+        "key": "your_razorpay_key", // Replace with your Razorpay Key ID
+        "amount": 50000, // in paise = ₹500
+        "currency": "INR",
+        "name": "National Youth Computer Academy",
+        "description": "Course Enrollment",
+        "handler": function (response){
+          alert("✅ Payment successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+          "name": document.getElementById('name').value || "Student",
+          "email": document.getElementById('email').value || "example@email.com",
+          "contact": document.getElementById('phone').value || "9999999999"
+        },
+        "theme": {
+          "color": "#3399cc"
+        },
+        "method": {
+          "upi": true
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+</body>
+</html>
